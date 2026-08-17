@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($email !== '' && $password !== '') {
         if ($email === 'me@example.com' && $password === 'testpass') {
             $_SESSION['user'] = 'me';
-            $loggedin = true;
+            header('Location: index.php');
+            exit;
         } else {
             $error_message = 'Địa chỉ email và mật khẩu không khớp!';
         }
@@ -30,28 +31,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Đoạn mã HTML trình bày nội dung trang web.
 -->
 <?php render_page_header(); ?>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 <?php if (!empty($error_message)): ?>
     <?php include __DIR__ . '/../partials/show_error.php'; ?>
 <?php endif; ?>
-
 <?php if ($loggedin): ?>
-    <p>Bạn đã đăng nhập!</p>
+    <p class="alert alert-success">Bạn đã đăng nhập!</p>
 <?php else: ?>
-    <h2>Form Đăng nhập</h2>
-    <form action="login.php" method="post">
-        <p>
-            <label>Địa chỉ Email
-                <input type="email" name="email" value="<?= html_escape($_POST['email'] ?? '') ?>">
-            </label>
-        </p>
-        <p>
-            <label>Mật khẩu
-                <input type="password" name="password">
-            </label>
-        </p>
-        <p><input type="submit" name="submit" value="Đăng nhập!"></p>
+    <h2 class="mb-3">Form Đăng nhập</h2>
+    <form action="login.php" method="post" class="col-md-4">
+        <div class="mb-3">
+            <label for="email" class="form-label">Địa chỉ Email</label>
+            <input type="email" id="email" name="email" class="form-control"
+                value="<?= html_escape($_POST['email'] ?? '') ?>">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu</label>
+            <input type="password" id="password" name="password" class="form-control">
+        </div>
+        <button type="submit" name="submit" class="btn btn-primary">Đăng nhập!</button>
     </form>
 <?php endif; ?>
-
-<?php render_page_footer($loggedin); ?>
+<?php
+render_page_footer($loggedin);
+?>
